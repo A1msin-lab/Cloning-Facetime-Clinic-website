@@ -51,6 +51,8 @@
     const sort = document.querySelector('#productSort');
     const count = document.querySelector('#productResultCount');
     const empty = document.querySelector('#productEmpty');
+    const total = document.querySelector('#productTotal');
+    if (total) total.textContent = `${products.length} รายการ`;
     [...new Set(products.map(p => p.category))].sort().forEach(cat => category.insertAdjacentHTML('beforeend', `<option value="${esc(cat)}">${esc(cat)}</option>`));
 
     function render() {
