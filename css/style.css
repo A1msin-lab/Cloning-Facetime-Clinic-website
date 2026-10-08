@@ -1631,7 +1631,7 @@ a.contact-card:hover {
   font-weight: 500;
 }
 
-.contact-card span {
+.contact-card > span:not(.contact-icon) {
   display: block;
   margin-top: 4px;
   font-size: 13px;
