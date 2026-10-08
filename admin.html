@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Dashboard ร้านค้า | FaceTime Clinic</title>
+  <link rel="icon" href="images/logo/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Noto+Sans+Thai:wght@300;400;500;600&family=Pridi:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+  <header class="admin-header">
+    <div class="admin-wrap admin-header-inner">
+      <a class="brand" href="index.html"><img src="images/logo/logo.svg" alt="FaceTime Clinic"><span class="brand-text">FACE TIME<small>CLINIC</small></span></a>
+      <div class="admin-user" id="adminUser" hidden>
+        <span id="adminEmail"></span>
+        <button class="btn btn--outline btn--sm" id="logoutBtn" type="button">ออกจากระบบ</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-wrap">
+    <!-- ===== Login ===== -->
+    <section class="admin-login" id="loginView" hidden>
+      <p class="eyebrow">Store Dashboard</p>
+      <h1>เข้าสู่ระบบ</h1>
+      <p class="admin-muted">สำหรับเจ้าหน้าที่คลินิกเท่านั้น</p>
+      <form id="loginForm" class="admin-form">
+        <label>อีเมล<input type="email" name="email" required autocomplete="username"></label>
+        <label>รหัสผ่าน<input type="password" name="password" required autocomplete="current-password"></label>
+        <button class="btn btn--gold btn--block" type="submit">เข้าสู่ระบบ</button>
+        <p class="admin-error" id="loginError" hidden></p>
+      </form>
+    </section>
+
+    <section class="admin-login" id="deniedView" hidden>
+      <h1>ไม่มีสิทธิ์เข้าถึง</h1>
+      <p class="admin-muted">บัญชีนี้ยังไม่ได้รับสิทธิ์ผู้ดูแลร้านค้า กรุณาติดต่อผู้ดูแลระบบ</p>
+    </section>
+
+    <!-- ===== Dashboard ===== -->
+    <section id="dashView" hidden>
+      <div class="admin-title">
+        <div><p class="eyebrow">Store Dashboard</p><h1>ภาพรวมร้านค้า</h1></div>
+        <button class="btn btn--outline btn--sm" id="refreshBtn" type="button">รีเฟรชข้อมูล</button>
+      </div>
+
+      <nav class="admin-tabs" role="tablist">
+        <button type="button" role="tab" data-tab="overview" class="is-active">ภาพรวม</button>
+        <button type="button" role="tab" data-tab="orders">คำสั่งซื้อ <span class="admin-count" id="newOrderCount"></span></button>
+        <button type="button" role="tab" data-tab="products">สินค้า</button>
+      </nav>
+
+      <div class="admin-panel" data-panel="overview">
+        <div class="kpi-grid" id="kpiGrid"></div>
+        <div class="admin-two-col">
+          <div class="admin-card">
+            <h2>สินค้าขายดี</h2>
+            <div id="topProducts"></div>
+          </div>
+          <div class="admin-card">
+            <h2>คำสั่งซื้อล่าสุด</h2>
+            <div id="recentOrders"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-panel" data-panel="orders" hidden>
+        <div class="admin-toolbar">
+          <label>สถานะ<select id="orderFilter"><option value="all">ทั้งหมด</option></select></label>
+          <label>ค้นหา<input id="orderSearch" placeholder="เลขที่ ชื่อ หรือเบอร์โทร"></label>
+        </div>
+        <div id="ordersList"></div>
+      </div>
+
+      <div class="admin-panel" data-panel="products" hidden>
+        <div class="admin-toolbar">
+          <label>ค้นหา<input id="productSearch" placeholder="รหัสหรือชื่อสินค้า"></label>
+          <button class="btn btn--gold btn--sm" type="button" id="addProductToggle">+ เพิ่มสินค้า</button>
+        </div>
+        <form id="addProductForm" class="admin-card admin-form admin-add" hidden>
+          <h2>เพิ่มสินค้าใหม่</h2>
+          <div class="admin-form-grid">
+            <label>รหัสสินค้า<input name="id" required placeholder="เช่น SUN02"></label>
+            <label>ชื่อสินค้า<input name="name" required></label>
+            <label>แบรนด์<input name="brand"></label>
+            <label>หมวดหมู่<input name="category"></label>
+            <label>ราคา (บาท)<input name="price" type="number" min="0" step="1"></label>
+            <label>ราคาเดิม (บาท)<input name="old_price" type="number" min="0" step="1"></label>
+            <label>ขนาด / หน่วย<input name="unit" placeholder="เช่น 30 ml"></label>
+            <label>ป้าย<input name="badge" placeholder="เช่น New, Best Seller"></label>
+            <label class="span-2">ที่อยู่รูปภาพ<input name="image" placeholder="images/products/SUN02.jpg"></label>
+            <label class="span-2">คำอธิบาย<textarea name="description" rows="3"></textarea></label>
+          </div>
+          <button class="btn btn--gold" type="submit">บันทึกสินค้า</button>
+          <p class="admin-error" id="addProductError" hidden></p>
+        </form>
+        <div id="productsList"></div>
+      </div>
+    </section>
+
+    <p class="admin-loading" id="loadingView">กำลังโหลด...</p>
+  </main>
+
+  <div class="admin-toast" id="toast" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

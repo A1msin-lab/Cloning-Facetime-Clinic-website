@@ -1,5 +1,25 @@
 (() => {
-  const products = Array.isArray(window.FACETIME_PRODUCTS) ? window.FACETIME_PRODUCTS : [];
+  // Local file is the fallback; loadProducts() replaces it with live data from Supabase.
+  let products = Array.isArray(window.FACETIME_PRODUCTS) ? window.FACETIME_PRODUCTS : [];
+  const SB = window.FACETIME_SUPABASE;
+  const sbFetch = (path, opts = {}) => fetch(`${SB.url}/rest/v1/${path}`, { ...opts, headers: { apikey: SB.key, 'Content-Type': 'application/json', ...(opts.headers || {}) } });
+
+  async function loadProducts() {
+    if (!SB) return;
+    const ctrl = new AbortController(); const timer = setTimeout(() => ctrl.abort(), 6000);
+    try {
+      const res = await sbFetch('products?select=*&order=sort_order.asc', { signal: ctrl.signal });
+      if (!res.ok) throw new Error(res.status);
+      const rows = await res.json();
+      if (rows.length) products = rows.map(r => ({
+        id: r.id, name: r.name, description: r.description, detail: r.detail,
+        price: Number(r.price || 0), oldPrice: Number(r.old_price || 0), badge: r.badge || '',
+        category: r.category, brand: r.brand, status: r.status, unit: r.unit, image: r.image
+      }));
+    } catch (err) {
+      console.warn('Supabase products unavailable, using local data', err);
+    } finally { clearTimeout(timer); }
+  }
   const CART_KEY = 'facetime_clinic_cart_v19';
   const money = n => `฿${Number(n || 0).toLocaleString('th-TH')}`;
   const esc = s => String(s ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
@@ -199,10 +219,12 @@
       form?.querySelectorAll('select[name="province"],select[name="district"],select[name="subdistrict"],select[name="postalCode"]').forEach(s=>s.disabled=true);
     }
 
-    mount.querySelector('#orderForm').onsubmit=e=>{
+    mount.querySelector('#orderForm').onsubmit=async e=>{
       e.preventDefault();
-      const fd=new FormData(e.currentTarget);
-      const selectedText=name=>{const el=e.currentTarget.querySelector(`[name="${name}"]`);return el?.selectedOptions?.[0]?.textContent?.trim()||'-';};
+      const form=e.currentTarget;
+      const submitBtn=form.querySelector('button[type="submit"]');
+      const fd=new FormData(form);
+      const selectedText=name=>{const el=form.querySelector(`[name="${name}"]`);return el?.selectedOptions?.[0]?.textContent?.trim()||'-';};
       const address=[
         `บ้านเลขที่: ${fd.get('houseNo')}`,
         `ถนน: ${fd.get('road') || '-'}`,
@@ -212,13 +234,26 @@
         `รหัสไปรษณีย์: ${fd.get('postalCode') || '-'}`
       ].join('\n');
       const lines=items.map(x=>`- ${x.p.name} x${x.qty} = ${money(x.p.price*x.qty)}`).join('\n');
-      const summary=`สั่งซื้อสินค้า FaceTime Clinic\nชื่อ: ${fd.get('name')}\nโทร: ${fd.get('phone')}\nที่อยู่จัดส่ง:\n${address}\n${lines}\nยอดรวม: ${money(total)}${fd.get('note')?`\nหมายเหตุ: ${fd.get('note')}`:''}`;
+      submitBtn.disabled=true; submitBtn.textContent='กำลังส่งคำสั่งซื้อ...';
+      let orderNo='';
+      try{
+        const res=await sbFetch('rpc/place_order',{method:'POST',body:JSON.stringify({
+          customer:{name:fd.get('name'),phone:fd.get('phone'),address,note:fd.get('note')||''},
+          items:items.map(x=>({id:x.p.id,qty:x.qty}))
+        })});
+        if(!res.ok) throw new Error(await res.text());
+        orderNo=await res.json();
+        localStorage.removeItem(CART_KEY); updateCartCount();
+      }catch(err){ console.warn('Order not saved to Supabase',err); }
+      if(orderNo) submitBtn.textContent='ส่งคำสั่งซื้อแล้ว ✓';
+      else { submitBtn.disabled=false; submitBtn.textContent='สร้างสรุปคำสั่งซื้อ'; }
+      const summary=`สั่งซื้อสินค้า FaceTime Clinic${orderNo?`\nเลขที่คำสั่งซื้อ: ${orderNo}`:''}\nชื่อ: ${fd.get('name')}\nโทร: ${fd.get('phone')}\nที่อยู่จัดส่ง:\n${address}\n${lines}\nยอดรวม: ${money(total)}${fd.get('note')?`\nหมายเหตุ: ${fd.get('note')}`:''}`;
       const result=mount.querySelector('#orderResult');
       result.hidden=false;
-      result.innerHTML=`<h3>สร้างสรุปคำสั่งซื้อแล้ว</h3><textarea readonly id="orderSummaryText">${esc(summary)}</textarea><div class="result-actions"><button class="btn btn--gold" type="button" id="copyOrder">คัดลอกสรุป</button><a class="btn btn--outline" href="https://page.line.me/edz3851q" target="_blank" rel="noopener">เปิด LINE ให้คลินิก</a></div><p class="store-note">กด “คัดลอกสรุป” แล้วเปิด LINE เพื่อส่งรายละเอียดให้คลินิก เจ้าหน้าที่จะยืนยันสต็อก ค่าจัดส่ง และการชำระเงินอีกครั้ง</p>`;
+      result.innerHTML=`<h3>${orderNo?`ได้รับคำสั่งซื้อแล้ว · เลขที่ ${esc(orderNo)}`:'สร้างสรุปคำสั่งซื้อแล้ว'}</h3>${orderNo?'':'<p class="store-note">ระบบบันทึกคำสั่งซื้อไม่สำเร็จ กรุณาส่งสรุปนี้ให้คลินิกทาง LINE</p>'}<textarea readonly id="orderSummaryText">${esc(summary)}</textarea><div class="result-actions"><button class="btn btn--gold" type="button" id="copyOrder">คัดลอกสรุป</button><a class="btn btn--outline" href="https://page.line.me/edz3851q" target="_blank" rel="noopener">เปิด LINE ให้คลินิก</a></div><p class="store-note">กด “คัดลอกสรุป” แล้วเปิด LINE เพื่อส่งรายละเอียดให้คลินิก เจ้าหน้าที่จะยืนยันสต็อก ค่าจัดส่ง และการชำระเงินอีกครั้ง</p>`;
       mount.querySelector('#copyOrder').onclick=async()=>{try{await navigator.clipboard.writeText(summary);mount.querySelector('#copyOrder').textContent='คัดลอกแล้ว ✓';}catch{const t=mount.querySelector('#orderSummaryText');t.focus();t.select();document.execCommand('copy');mount.querySelector('#copyOrder').textContent='คัดลอกแล้ว ✓';}};
     };
   }
 
-  document.addEventListener('DOMContentLoaded',()=>{updateCartCount();initProductsPage();initProductDetail();renderCart();initOrder();});
+  document.addEventListener('DOMContentLoaded',async()=>{updateCartCount();await loadProducts();initProductsPage();initProductDetail();renderCart();initOrder();});
 })();
