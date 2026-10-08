@@ -80,7 +80,9 @@
       document.querySelector('#detailAdd').onclick = () => { const cart=getCart(); const n=Math.max(1,parseInt(qty.value,10)||1); const item=cart.find(x=>x.id===p.id); if(item)item.qty+=n;else cart.push({id:p.id,qty:n}); saveCart(cart); document.querySelector('#detailAdd').textContent='เพิ่มลงตะกร้าแล้ว ✓'; };
     }
     const related = products.filter(x => x.id !== p.id && (x.category === p.category || x.brand === p.brand)).slice(0,4);
-    document.querySelector('#relatedProducts').innerHTML = related.map(cardMarkup).join(''); bindAddButtons(document.querySelector('#relatedProducts'));
+    const relatedGrid = document.querySelector('#relatedProducts');
+    relatedGrid.innerHTML = related.map(cardMarkup).join('');
+    relatedGrid.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible')); bindAddButtons(relatedGrid);
   }
 
   function renderCart() {
