@@ -17,29 +17,23 @@
     <div class="admin-wrap admin-header-inner">
       <a class="brand" href="index.html"><img src="images/logo/logo.jpg" alt="FaceTime Clinic"><span class="brand-text">FACE TIME<small>CLINIC</small></span></a>
       <div class="admin-user" id="adminUser" hidden>
-        <span id="adminEmail"></span>
-        <button class="btn btn--outline btn--sm" id="logoutBtn" type="button">ออกจากระบบ</button>
+        <a class="btn btn--outline btn--sm" href="index.html">กลับหน้าเว็บ</a>
+        <button class="btn btn--outline btn--sm" id="logoutBtn" type="button">ล้างรหัสในเครื่องนี้</button>
       </div>
     </div>
   </header>
 
   <main class="admin-wrap">
-    <!-- ===== Login ===== -->
+    <!-- ===== Admin key (ยังไม่ใช้ระบบ login: เข้าด้วยลิงก์ admin.html?key=XXXX) ===== -->
     <section class="admin-login" id="loginView" hidden>
       <p class="eyebrow">Store Dashboard</p>
-      <h1>เข้าสู่ระบบ</h1>
-      <p class="admin-muted">สำหรับเจ้าหน้าที่คลินิกเท่านั้น</p>
+      <h1>หลังบ้านร้านค้า</h1>
+      <p class="admin-muted">เปิดผ่านลิงก์หลังบ้านของคลินิก หรือกรอกรหัสหลังบ้าน (ระบบจะจำไว้ในเครื่องนี้)</p>
       <form id="loginForm" class="admin-form">
-        <label>อีเมล<input type="email" name="email" required autocomplete="username"></label>
-        <label>รหัสผ่าน<input type="password" name="password" required autocomplete="current-password"></label>
-        <button class="btn btn--gold btn--block" type="submit">เข้าสู่ระบบ</button>
+        <label>รหัสหลังบ้าน<input name="key" required autocomplete="off"></label>
+        <button class="btn btn--gold btn--block" type="submit">เข้าหลังบ้าน</button>
         <p class="admin-error" id="loginError" hidden></p>
       </form>
-    </section>
-
-    <section class="admin-login" id="deniedView" hidden>
-      <h1>ไม่มีสิทธิ์เข้าถึง</h1>
-      <p class="admin-muted">บัญชีนี้ยังไม่ได้รับสิทธิ์ผู้ดูแลร้านค้า กรุณาติดต่อผู้ดูแลระบบ</p>
     </section>
 
     <!-- ===== Dashboard ===== -->
@@ -108,7 +102,6 @@
 
   <div class="admin-toast" id="toast" hidden></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js"></script>
   <script src="js/admin.js"></script>
 </body>

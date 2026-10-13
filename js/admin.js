@@ -1,6 +1,19 @@
 (() => {
   const SB = window.FACETIME_SUPABASE;
-  const db = window.supabase.createClient(SB.url, SB.key);
+  // ยังไม่ใช้ระบบ login: ทุกคำขอแนบ "รหัสหลังบ้าน" (app_settings.store_admin_key) ไปกับฟังก์ชัน store_admin_* ใน Supabase
+  const KEY_STORE = 'facetime_store_admin_key';
+  const getKey = () => { try { return localStorage.getItem(KEY_STORE) || ''; } catch { return ''; } };
+  const setKey = k => { try { k ? localStorage.setItem(KEY_STORE, k) : localStorage.removeItem(KEY_STORE); } catch {} };
+  async function rpc(fn, args = {}) {
+    const res = await fetch(`${SB.url}/rest/v1/rpc/${fn}`, {
+      method: 'POST',
+      headers: { apikey: SB.key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_key: getKey(), ...args })
+    });
+    const body = await res.text();
+    if (!res.ok) { const err = new Error(body); err.badKey = /invalid admin key/.test(body); throw err; }
+    return body ? JSON.parse(body) : null;
+  }
   const $ = sel => document.querySelector(sel);
   const money = n => `฿${Number(n || 0).toLocaleString('th-TH')}`;
   const esc = s => String(s ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
@@ -18,7 +31,7 @@
   let orders = [];
 
   function show(view) {
-    ['loginView', 'deniedView', 'dashView', 'loadingView'].forEach(id => { $('#' + id).hidden = id !== view; });
+    ['loginView', 'dashView', 'loadingView'].forEach(id => { $('#' + id).hidden = id !== view; });
   }
 
   function toast(msg, isError = false) {
@@ -27,46 +40,40 @@
     clearTimeout(toast.timer); toast.timer = setTimeout(() => { t.hidden = true; }, 2600);
   }
 
-  // ===== Auth =====
+  // ===== Admin key =====
   async function boot() {
-    const { data: { session } } = await db.auth.getSession();
-    if (!session) { $('#adminUser').hidden = true; show('loginView'); return; }
-    $('#adminEmail').textContent = session.user.email || '';
-    $('#adminUser').hidden = false;
-    const { data: isAdmin, error } = await db.rpc('is_store_admin');
-    if (error || !isAdmin) { show('deniedView'); return; }
+    const urlKey = new URLSearchParams(location.search).get('key');
+    if (urlKey) { setKey(urlKey.trim()); history.replaceState(null, '', location.pathname); }
+    if (!getKey()) { $('#adminUser').hidden = true; show('loginView'); return; }
     show('loadingView');
-    await loadAll();
+    try { await loadAll(); }
+    catch (err) {
+      if (err.badKey) { setKey(''); $('#loginError').textContent = 'รหัสหลังบ้านไม่ถูกต้อง'; $('#loginError').hidden = false; show('loginView'); return; }
+      toast('โหลดข้อมูลไม่สำเร็จ', true);
+    }
+    $('#adminUser').hidden = false;
     show('dashView');
   }
 
-  $('#loginForm').addEventListener('submit', async e => {
+  $('#loginForm').addEventListener('submit', e => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const btn = e.currentTarget.querySelector('button');
-    btn.disabled = true; $('#loginError').hidden = true;
-    const { error } = await db.auth.signInWithPassword({ email: fd.get('email'), password: fd.get('password') });
-    btn.disabled = false;
-    if (error) { $('#loginError').textContent = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'; $('#loginError').hidden = false; return; }
+    setKey(new FormData(e.currentTarget).get('key').trim());
+    $('#loginError').hidden = true;
     boot();
   });
 
-  $('#logoutBtn').addEventListener('click', () => db.auth.signOut());
+  $('#logoutBtn').addEventListener('click', () => { setKey(''); boot(); });
 
   // ===== Data =====
   async function loadAll() {
-    const [p, o] = await Promise.all([
-      db.from('products').select('*').order('sort_order'),
-      db.from('orders').select('*, order_items(*)').order('created_at', { ascending: false }).limit(1000)
-    ]);
-    if (p.error || o.error) { toast('โหลดข้อมูลไม่สำเร็จ', true); return; }
-    products = p.data; orders = o.data;
+    const data = await rpc('store_admin_data');
+    products = data.products || []; orders = data.orders || [];
     renderAll();
   }
 
   function renderAll() { renderOverview(); renderOrders(); renderProducts(); }
 
-  $('#refreshBtn').addEventListener('click', async () => { await loadAll(); toast('อัปเดตข้อมูลแล้ว'); });
+  $('#refreshBtn').addEventListener('click', async () => { try { await loadAll(); toast('อัปเดตข้อมูลแล้ว'); } catch { toast('โหลดข้อมูลไม่สำเร็จ', true); } });
 
   // ===== Tabs =====
   document.querySelectorAll('[data-tab]').forEach(btn => btn.addEventListener('click', () => {
@@ -146,8 +153,8 @@
       </details>`).join('');
     $('#ordersList').querySelectorAll('[data-order-status]').forEach(sel => sel.addEventListener('change', async () => {
       const id = Number(sel.dataset.orderStatus);
-      const { error } = await db.from('orders').update({ status: sel.value }).eq('id', id);
-      if (error) { toast('เปลี่ยนสถานะไม่สำเร็จ', true); return; }
+      try { await rpc('store_admin_update_order', { p_id: id, p_status: sel.value }); }
+      catch { toast('เปลี่ยนสถานะไม่สำเร็จ', true); return; }
       orders.find(o => o.id === id).status = sel.value;
       renderOverview(); renderOrders();
       toast('บันทึกสถานะแล้ว');
@@ -187,9 +194,10 @@
       active: val('active').checked
     };
     btn.disabled = true;
-    const { error } = await db.from('products').update(patch).eq('id', id);
+    let failed = false;
+    try { await rpc('store_admin_save_product', { p_id: id, p: patch }); } catch { failed = true; }
     btn.disabled = false;
-    if (error) { toast('บันทึกไม่สำเร็จ', true); return; }
+    if (failed) { toast('บันทึกไม่สำเร็จ', true); return; }
     Object.assign(products.find(p => p.id === id), patch);
     renderOverview();
     toast('บันทึกสินค้าแล้ว');
@@ -206,11 +214,11 @@
       price: numOrNull(fd.get('price')), old_price: numOrNull(fd.get('old_price')),
       unit: fd.get('unit').trim(), badge: fd.get('badge').trim() || null,
       image: fd.get('image').trim() || null, description: fd.get('description').trim(),
-      sort_order: products.reduce((m, p) => Math.max(m, p.sort_order), 0) + 1
     };
-    const { data, error } = await db.from('products').insert(row).select().single();
+    let data, error;
+    try { data = await rpc('store_admin_add_product', { p: row }); } catch (err) { error = err; }
     if (error) {
-      $('#addProductError').textContent = error.code === '23505' ? 'รหัสสินค้านี้มีอยู่แล้ว' : 'เพิ่มสินค้าไม่สำเร็จ';
+      $('#addProductError').textContent = /23505|duplicate/.test(error.message) ? 'รหัสสินค้านี้มีอยู่แล้ว' : 'เพิ่มสินค้าไม่สำเร็จ';
       $('#addProductError').hidden = false; return;
     }
     $('#addProductError').hidden = true;
@@ -219,6 +227,5 @@
     toast('เพิ่มสินค้าแล้ว');
   });
 
-  db.auth.onAuthStateChange(event => { if (event === 'SIGNED_OUT') boot(); });
   boot();
 })();

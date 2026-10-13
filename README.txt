@@ -40,3 +40,12 @@ Address form update (v23)
 - จังหวัด → อำเภอ/เขต → ตำบล/แขวง → รหัสไปรษณีย์ are linked dependent dropdowns.
 - Address geography data is loaded from the Thailand Geography JSON dataset (7,000+ subdistrict records) and cached in the browser after first load.
 - ถนน is an editable field with suggestions rather than a strict linked dropdown because the geography dataset does not contain a complete authoritative road-name table.
+
+
+Store backend (v24) — ระบบสั่งซื้อ + หลังบ้าน (ยังไม่ใช้ login)
+- order.html → เรียก Supabase RPC place_order → บันทึกตาราง orders + order_items (ราคาคำนวณฝั่ง DB จากตาราง products)
+- admin.html → หลังบ้าน: ภาพรวมยอดขาย / รายการคำสั่งซื้อ (สินค้า จำนวน ราคา ที่อยู่ เบอร์) / เปลี่ยนสถานะ / แก้ราคา-สต็อกสินค้า
+- เข้าหลังบ้านด้วยลิงก์ admin.html?key=<รหัส> (รหัสอยู่ใน Supabase ตาราง app_settings key = store_admin_key)
+  ระบบจำรหัสไว้ในเบราว์เซอร์เครื่องนั้น — เปลี่ยนรหัสได้โดยแก้ค่าใน app_settings (ลิงก์เก่าจะใช้ไม่ได้ทันที)
+- หลังบ้านเรียกเฉพาะฟังก์ชัน store_admin_* ที่ตรวจรหัสก่อนทุกครั้ง; ตาราง orders อ่านตรงจากเว็บไม่ได้ (RLS)
+- ยังไม่เชื่อม LINE และยังไม่ใช้ระบบ login (ตาราง store_admins + is_store_admin() ยังอยู่ ไว้ต่อยอดภายหลัง)
