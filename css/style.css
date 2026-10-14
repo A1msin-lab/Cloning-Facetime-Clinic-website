@@ -2179,3 +2179,7 @@ a.contact-card:hover {
 .address-grid{display:grid;gap:16px}.address-grid--2{grid-template-columns:1fr 1fr}.address-grid--2 + .address-grid--2{margin-top:16px}
 .address-block label{margin-bottom:14px!important}.address-block select,.address-block input{margin-top:7px;width:100%;min-height:48px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font:inherit;outline:none}.address-block select:focus,.address-block input:focus{border-color:var(--gold)}.address-block select:disabled{opacity:.55;background:#f5f2ec}.address-data-note{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
 @media(max-width:700px){.address-title{display:block}.address-title span{display:block;margin-top:4px}.address-grid--2{grid-template-columns:1fr;gap:0}.address-grid--2 + .address-grid--2{margin-top:0}}
+
+/* Sample-data note (demo doctor) */
+.sample-note { margin-top: 14px; font-size: 13px; color: var(--muted); }
+.brand img { background: #fff; }

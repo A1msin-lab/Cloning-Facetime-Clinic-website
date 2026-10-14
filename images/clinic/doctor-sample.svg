@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1080" role="img" aria-label="ภาพประกอบแพทย์ตัวอย่าง">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3ece1"/>
+      <stop offset="1" stop-color="#e2d4bd"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.36" r="0.5">
+      <stop offset="0" stop-color="#fffaf2" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#fffaf2" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="coat" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#ece6dc"/>
+    </linearGradient>
+    <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a2d24"/>
+      <stop offset="1" stop-color="#241b15"/>
+    </linearGradient>
+    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f1d6bf"/>
+      <stop offset="1" stop-color="#e3bfa1"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dcc497"/>
+      <stop offset="1" stop-color="#8a6a35"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="1080" fill="url(#bg)"/>
+  <ellipse cx="400" cy="400" rx="380" ry="420" fill="url(#glow)"/>
+  <!-- decorative arch lines -->
+  <path d="M120 1080 V420 a280 280 0 0 1 560 0 V1080" fill="none" stroke="#b08a4f" stroke-opacity=".28" stroke-width="2"/>
+  <path d="M150 1080 V430 a250 250 0 0 1 500 0 V1080" fill="none" stroke="#b08a4f" stroke-opacity=".16" stroke-width="1.5"/>
+
+  <!-- hair back -->
+  <path d="M262 360 C250 230 320 160 400 160 C482 160 552 228 540 362 C536 470 560 560 586 640 L214 640 C240 560 266 470 262 360Z" fill="url(#hair)"/>
+
+  <!-- neck -->
+  <path d="M360 470 L360 560 Q400 590 440 560 L440 470Z" fill="#dcb393"/>
+
+  <!-- body / coat -->
+  <path d="M120 1080 C120 860 170 700 290 650 L360 620 Q400 660 440 620 L510 650 C630 700 680 860 680 1080Z" fill="url(#coat)"/>
+  <!-- blouse -->
+  <path d="M360 620 L400 760 L440 620 Q400 655 360 620Z" fill="#c9b08a"/>
+  <!-- lapels -->
+  <path d="M352 616 L300 660 L340 770 L318 800 L400 900 L392 760Z" fill="#f7f3ec" stroke="#d9cfbf" stroke-width="2"/>
+  <path d="M448 616 L500 660 L460 770 L482 800 L400 900 L408 760Z" fill="#f7f3ec" stroke="#d9cfbf" stroke-width="2"/>
+  <line x1="400" y1="900" x2="400" y2="1080" stroke="#d9cfbf" stroke-width="2"/>
+  <!-- pocket + badge -->
+  <rect x="470" y="830" width="110" height="10" rx="5" fill="#d9cfbf"/>
+  <rect x="484" y="770" width="78" height="44" rx="6" fill="#ffffff" stroke="url(#gold)" stroke-width="2"/>
+  <rect x="494" y="782" width="58" height="6" rx="3" fill="#b08a4f"/>
+  <rect x="494" y="796" width="40" height="5" rx="2.5" fill="#d9cfbf"/>
+
+  <!-- stethoscope -->
+  <path d="M330 640 C300 720 300 800 340 850 C365 880 400 880 410 860" fill="none" stroke="url(#gold)" stroke-width="9" stroke-linecap="round"/>
+  <path d="M470 640 C500 720 490 790 455 830" fill="none" stroke="url(#gold)" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="455" cy="842" r="22" fill="#f7f3ec" stroke="url(#gold)" stroke-width="8"/>
+  <circle cx="455" cy="842" r="8" fill="#b08a4f"/>
+
+  <!-- head -->
+  <ellipse cx="400" cy="372" rx="112" ry="136" fill="url(#skin)"/>
+  <!-- hair front -->
+  <path d="M286 372 C278 250 340 196 410 198 C470 200 512 236 520 300 C468 300 420 270 392 232 C372 290 330 330 286 372Z" fill="url(#hair)"/>
+  <!-- subtle face (closed, serene) -->
+  <path d="M352 380 q16 -10 32 0" fill="none" stroke="#7a5a45" stroke-width="4" stroke-linecap="round"/>
+  <path d="M416 380 q16 -10 32 0" fill="none" stroke="#7a5a45" stroke-width="4" stroke-linecap="round"/>
+  <path d="M378 448 q22 16 44 0" fill="none" stroke="#b9776a" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="350" cy="420" rx="18" ry="10" fill="#e7a99a" opacity=".35"/>
+  <ellipse cx="450" cy="420" rx="18" ry="10" fill="#e7a99a" opacity=".35"/>
+  <!-- earrings -->
+  <circle cx="290" cy="420" r="6" fill="url(#gold)"/>
+  <circle cx="510" cy="420" r="6" fill="url(#gold)"/>
+
+  <!-- sample tag -->
+  <g transform="translate(400 1030)">
+    <rect x="-118" y="-22" width="236" height="40" rx="20" fill="#ffffff" fill-opacity=".85"/>
+    <text x="0" y="5" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#8a6a35" letter-spacing="2">ILLUSTRATION · SAMPLE DOCTOR</text>
+  </g>
+</svg>

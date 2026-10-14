@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1224" role="img" aria-label="ภาพประกอบห้องให้คำปรึกษา">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f0e6"/>
+      <stop offset="1" stop-color="#ebe0cf"/>
+    </linearGradient>
+    <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d8c3a0"/>
+      <stop offset="1" stop-color="#b9a07a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dcc497"/>
+      <stop offset="1" stop-color="#8a6a35"/>
+    </linearGradient>
+    <radialGradient id="light" cx="0.5" cy="0.3" r="0.6">
+      <stop offset="0" stop-color="#fffaf2"/>
+      <stop offset="1" stop-color="#fffaf2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1440" height="1224" fill="url(#wall)"/>
+  <rect y="860" width="1440" height="364" fill="#e2d4bd"/>
+  <ellipse cx="720" cy="360" rx="700" ry="520" fill="url(#light)"/>
+
+  <!-- arched window -->
+  <path d="M960 760 V330 a170 170 0 0 1 340 0 V760Z" fill="#fbf8f2" stroke="#b08a4f" stroke-opacity=".5" stroke-width="6"/>
+  <line x1="1130" y1="160" x2="1130" y2="760" stroke="#b08a4f" stroke-opacity=".35" stroke-width="4"/>
+  <line x1="960" y1="460" x2="1300" y2="460" stroke="#b08a4f" stroke-opacity=".35" stroke-width="4"/>
+
+  <!-- framed certificates -->
+  <g fill="#ffffff" stroke="url(#gold)" stroke-width="6">
+    <rect x="200" y="250" width="180" height="230" rx="6"/>
+    <rect x="420" y="290" width="150" height="190" rx="6"/>
+  </g>
+  <g fill="#d9cfbf">
+    <rect x="230" y="290" width="120" height="10" rx="5"/>
+    <rect x="245" y="320" width="90" height="8" rx="4"/>
+    <circle cx="290" cy="410" r="26" fill="#e9dfcf" stroke="#b08a4f" stroke-width="4"/>
+    <rect x="445" y="325" width="100" height="9" rx="4.5"/>
+    <rect x="460" y="350" width="70" height="7" rx="3.5"/>
+    <circle cx="495" cy="425" r="20" fill="#e9dfcf" stroke="#b08a4f" stroke-width="4"/>
+  </g>
+
+  <!-- plant -->
+  <path d="M1360 860 l-30 -150 h-120 l-30 150Z" fill="#c9b08a"/>
+  <g fill="#8fa37f">
+    <path d="M1270 710 C1220 620 1180 560 1150 470 C1220 520 1260 600 1270 710Z"/>
+    <path d="M1270 710 C1290 600 1330 520 1390 460 C1380 560 1330 640 1270 710Z"/>
+    <path d="M1270 710 C1250 610 1260 520 1280 420 C1310 520 1300 620 1270 710Z" fill="#7d9270"/>
+  </g>
+
+  <!-- desk -->
+  <rect x="120" y="760" width="1000" height="40" rx="10" fill="url(#desk)"/>
+  <rect x="160" y="800" width="30" height="300" fill="#b9a07a"/>
+  <rect x="1050" y="800" width="30" height="300" fill="#b9a07a"/>
+
+  <!-- laptop -->
+  <path d="M520 600 h300 a10 10 0 0 1 10 10 v150 h-320 v-150 a10 10 0 0 1 10 -10Z" fill="#2b251f"/>
+  <rect x="535" y="615" width="270" height="130" rx="4" fill="#f3ece1"/>
+  <rect x="560" y="640" width="120" height="10" rx="5" fill="#b08a4f"/>
+  <rect x="560" y="664" width="200" height="8" rx="4" fill="#d9cfbf"/>
+  <rect x="560" y="684" width="170" height="8" rx="4" fill="#d9cfbf"/>
+  <rect x="560" y="704" width="190" height="8" rx="4" fill="#d9cfbf"/>
+  <path d="M470 760 h400 l-20 14 h-360Z" fill="#4d453d"/>
+
+  <!-- clipboard -->
+  <g transform="rotate(-8 320 700)">
+    <rect x="250" y="610" width="150" height="190" rx="10" fill="#ffffff" stroke="#d9cfbf" stroke-width="4"/>
+    <rect x="295" y="598" width="60" height="26" rx="8" fill="url(#gold)"/>
+    <rect x="272" y="650" width="105" height="8" rx="4" fill="#b08a4f"/>
+    <rect x="272" y="675" width="90" height="7" rx="3.5" fill="#d9cfbf"/>
+    <rect x="272" y="695" width="100" height="7" rx="3.5" fill="#d9cfbf"/>
+    <rect x="272" y="715" width="80" height="7" rx="3.5" fill="#d9cfbf"/>
+  </g>
+
+  <!-- stethoscope -->
+  <path d="M900 750 C880 700 920 660 960 680 C1000 700 990 740 1030 745" fill="none" stroke="url(#gold)" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="1045" cy="745" r="20" fill="#f7f3ec" stroke="url(#gold)" stroke-width="8"/>
+
+  <!-- cup -->
+  <path d="M440 712 h50 l-6 48 h-38Z" fill="#ffffff" stroke="#d9cfbf" stroke-width="3"/>
+  <path d="M490 722 q22 4 0 26" fill="none" stroke="#d9cfbf" stroke-width="5"/>
+
+  <!-- chairs -->
+  <g fill="#c9b08a">
+    <rect x="240" y="880" width="220" height="40" rx="18"/>
+    <rect x="250" y="820" width="200" height="70" rx="22" fill="#d6c1a0"/>
+    <rect x="262" y="920" width="16" height="190" fill="#a88f68"/>
+    <rect x="422" y="920" width="16" height="190" fill="#a88f68"/>
+  </g>
+  <g fill="#c9b08a">
+    <rect x="760" y="880" width="220" height="40" rx="18"/>
+    <rect x="770" y="820" width="200" height="70" rx="22" fill="#d6c1a0"/>
+    <rect x="782" y="920" width="16" height="190" fill="#a88f68"/>
+    <rect x="942" y="920" width="16" height="190" fill="#a88f68"/>
+  </g>
+
+  <g transform="translate(720 1170)">
+    <rect x="-150" y="-24" width="300" height="44" rx="22" fill="#ffffff" fill-opacity=".85"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#8a6a35" letter-spacing="2">ILLUSTRATION · CONSULTATION ROOM</text>
+  </g>
+</svg>
