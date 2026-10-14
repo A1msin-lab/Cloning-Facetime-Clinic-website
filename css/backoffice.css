@@ -1,0 +1,107 @@
+/* ===== Clinic back office (backoffice.html) — builds on admin.css ===== */
+.bo-sitenav { display: flex; gap: 4px; margin-right: auto; margin-left: 24px; }
+.bo-sitenav a { padding: 8px 14px; border-radius: 999px; font-size: 14px; color: var(--muted); text-decoration: none; }
+.bo-sitenav a:hover { color: var(--ink); background: var(--cream); }
+.bo-sitenav a.is-active { color: var(--ink); background: var(--cream); }
+.bo-actor { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.bo-actor select { padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; font: inherit; font-size: 14px; color: var(--text); }
+
+.bo-cols { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; margin-bottom: 16px; }
+.bo-col-main { flex: 3 1 480px; min-width: 0; }
+.bo-col-side { flex: 2 1 340px; min-width: 0; }
+.bo-stack { display: flex; flex-direction: column; gap: 16px; }
+.bo-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.bo-card-head h2 { margin: 0; }
+.bo-wrap { flex-wrap: wrap; }
+.bo-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 12px; }
+
+/* chips / filters */
+.bo-filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.bo-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: inherit; font-size: 13px; color: var(--text); cursor: pointer; }
+.bo-chip:hover { border-color: var(--gold-light); }
+.bo-chip.is-active { background: var(--dark); border-color: var(--dark); color: #fff; }
+
+/* pills */
+.type-pill { display: inline-flex; align-items: center; min-height: 24px; padding: 0 10px; border-radius: 999px; font-size: 12px; white-space: nowrap; }
+.type-surgery { background: #f6e6d8; color: #82502a; }
+.type-single { background: #e9eef6; color: #4a5f80; }
+.type-course { background: #e4efe0; color: #3f5f34; }
+.type-other { background: var(--cream); color: var(--text); }
+.st-confirmed { background: #e4efe0; color: #3f5f34; }
+.st-pending { background: #fbf1df; color: #7a5a24; }
+.st-move { background: #f6e6d8; color: #82502a; }
+.st-proposed { background: #ece7f4; color: #5a4a80; }
+
+/* request cards */
+.bo-req { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 12px; }
+.bo-req:last-child { margin-bottom: 0; }
+.bo-req-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 12px; align-items: flex-start; }
+.bo-req-who strong { display: block; color: var(--ink); font-weight: 500; font-size: 16px; line-height: 1.5; }
+.bo-req-who small { font-size: 12px; color: var(--muted); }
+.bo-req-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 16px; margin: 12px 0; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--bg); font-size: 14px; }
+.bo-req-info span { display: block; font-size: 12px; color: var(--muted); }
+.bo-req-info b { font-weight: 500; color: var(--ink); }
+.bo-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.bo-subform { margin-top: 12px; padding-top: 14px; border-top: 1px dashed var(--line); }
+.bo-subform label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.bo-subform input, .bo-subform select, .bo-subform textarea { width: 100%; margin-top: 6px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; font: inherit; font-size: 14px; color: var(--text); }
+.bo-btn-danger { color: #9a5c49; border-color: #e6cfc6; }
+.bo-btn-danger:hover { background: #f6ece8; }
+
+/* today timeline */
+.bo-today { list-style: none; margin: 0; padding: 0; }
+.bo-today li { display: flex; gap: 14px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.bo-today li:last-child { border-bottom: 0; }
+.bo-today time { width: 48px; flex: none; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bo-slot { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; border-radius: var(--radius-sm); background: var(--bg); }
+.bo-slot strong { display: block; font-weight: 500; color: var(--ink); font-size: 14px; line-height: 1.4; }
+.bo-slot small { font-size: 12px; color: var(--muted); }
+
+/* booking form */
+.bo-book { margin-bottom: 18px; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--bg); }
+.bo-book select { width: 100%; margin-top: 6px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; font: inherit; font-size: 14px; color: var(--text); }
+.admin-form select { width: 100%; margin-top: 6px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; font: inherit; font-size: 14px; color: var(--text); }
+.bo-cust { display: flex; flex-direction: column; gap: 6px; margin: -6px 0 12px; }
+.bo-cust button { display: flex; justify-content: space-between; gap: 12px; width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; font: inherit; font-size: 14px; color: var(--text); text-align: left; cursor: pointer; }
+.bo-cust button:hover { border-color: var(--gold); }
+.bo-picked { margin: -4px 0 12px; font-size: 14px; color: var(--ink); }
+
+/* course cards */
+.bo-pkg { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 10px; }
+.bo-pkg-main { flex: 2 1 260px; min-width: 0; }
+.bo-pkg-top { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.bo-pkg-top strong { font-weight: 500; color: var(--ink); font-size: 16px; }
+.bo-pkg-top small { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bo-pkg-line { display: flex; justify-content: space-between; gap: 8px; margin: 8px 0 6px; font-size: 14px; }
+.bo-pkg-line b { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 500; }
+.bo-bar { height: 8px; border-radius: 999px; background: var(--cream); overflow: hidden; }
+.bo-bar span { display: block; height: 100%; border-radius: 999px; background: var(--gold); }
+.bo-pkg-meta { margin-top: 6px; font-size: 12px; color: var(--muted); }
+.bo-stepper { flex: 1 1 220px; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.bo-step { width: 40px; height: 40px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; font: inherit; font-size: 18px; color: var(--ink); cursor: pointer; }
+.bo-step:hover { border-color: var(--gold); }
+.bo-step-n { min-width: 28px; text-align: center; font-size: 17px; font-variant-numeric: tabular-nums; color: var(--ink); }
+
+.bo-log { list-style: none; margin: 0; padding: 0; }
+.bo-log li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.bo-log li:last-child { border-bottom: 0; }
+.bo-log strong { display: block; font-weight: 500; color: var(--ink); }
+.bo-log small { font-size: 12px; color: var(--muted); }
+.bo-log .r { text-align: right; flex: none; font-variant-numeric: tabular-nums; }
+
+.bo-table { min-width: 820px; }
+.bo-table td small { display: block; font-size: 12px; color: var(--muted); }
+.bo-note { margin: 8px 0 60px; font-size: 13px; color: var(--muted); }
+.kpi.is-alert { border-color: var(--gold-light); }
+
+@media (max-width: 900px) {
+  .bo-sitenav { margin-left: 8px; }
+  .admin-header-inner { flex-wrap: wrap; padding: 10px 0; }
+}
+@media (max-width: 560px) {
+  .bo-sitenav { order: 3; width: 100%; margin: 0; }
+  .bo-actor { flex-wrap: wrap; }
+  .bo-stepper { justify-content: flex-start; }
+}
+.admin-card .admin-scroll .admin-table th:first-child, .admin-card .admin-scroll .admin-table td:first-child { padding-left: 16px; }
+.admin-card .admin-scroll .admin-table th:last-child, .admin-card .admin-scroll .admin-table td:last-child { padding-right: 16px; }
