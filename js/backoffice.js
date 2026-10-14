@@ -19,7 +19,29 @@
     if (!res.ok) { const err = new Error(body); err.badKey = /invalid admin key/.test(body); throw err; }
     return body ? JSON.parse(body) : null;
   }
-  const act = (action, p = {}) => rpc('clinic_admin_action', { p_action: action, p_actor: $('#actorSelect').value || null, p });
+  // ปุ่มที่ต้องซิงก์ Google Calendar / แจ้งลูกค้าทาง LINE → ส่งผ่าน n8n "10 Web Backoffice" ให้ทำงานเหมือนกดจาก LIFF
+  // (n8n เรียก clinic_admin_action ตัวเดิมใน Supabase ซึ่งตรวจรหัสหลังบ้านให้) · ดึงรอบว่าง / ค้นลูกค้า ยังเรียก Supabase ตรง
+  const N8N_ACTION_URL = 'https://ai-reminder-n8n.up.railway.app/webhook/backoffice-action';
+  const VIA_N8N = ['confirm', 'book', 'propose', 'decline', 'reschedule', 'cancel', 'sell', 'use'];
+  const actDirect = (action, p = {}) => rpc('clinic_admin_action', { p_action: action, p_actor: $('#actorSelect').value || null, p });
+  async function act(action, p = {}) {
+    if (!VIA_N8N.includes(action)) return actDirect(action, p);
+    let res;
+    try {
+      res = await fetch(N8N_ACTION_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: getKey(), action, actor: $('#actorSelect').value || null, p })
+      });
+    } catch {
+      // n8n ติดต่อไม่ได้ → บันทึกตรงที่ Supabase ไปก่อน (ปฏิทินจะซิงก์ตามรอบ 08 Scheduler แต่ไม่ได้แจ้ง LINE)
+      return actDirect(action, p);
+    }
+    const body = await res.json().catch(() => null);
+    if (!body) throw new Error('n8n ' + res.status);
+    if (body.error === 'bad_key') { const err = new Error('invalid admin key'); err.badKey = true; throw err; }
+    return body;
+  }
 
   const $ = sel => document.querySelector(sel);
   const esc = s => String(s ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
