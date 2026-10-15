@@ -1,5 +1,9 @@
 (() => {
   const SB = window.FACETIME_SUPABASE;
+  // หน้านี้คือหน้าไหน: backoffice.html = นัดหมาย, backoffice-courses.html = คอร์ส
+  const PAGE = document.body.dataset.page === 'courses' ? 'courses' : 'appointments';
+  // ลิงก์เก่า backoffice.html#courses → ไปหน้าคอร์สแยก
+  if (PAGE === 'appointments' && location.hash === '#courses') { location.replace('backoffice-courses.html' + location.search); return; }
   // ใช้รหัสหลังบ้านเดียวกับร้านค้า (app_settings.store_admin_key) แนบไปกับฟังก์ชัน clinic_admin_* ใน Supabase
   const KEY_STORE = 'facetime_store_admin_key';
   const ACTOR_STORE = 'facetime_backoffice_actor';
@@ -93,7 +97,6 @@
     }
     $('#adminUser').hidden = false;
     show('dashView');
-    selectTab(location.hash === '#courses' ? 'courses' : 'appointments');
   }
   $('#loginForm').addEventListener('submit', e => {
     e.preventDefault();
@@ -123,25 +126,17 @@
   function renderServiceOptions() {
     const groups = {};
     data.services.forEach(s => { (groups[s.category || 'อื่นๆ'] ||= []).push(s); });
-    $('#bookForm [name=service]').innerHTML = '<option value="">เลือกบริการ</option>' + Object.entries(groups).map(([g, list]) =>
+    if (PAGE === 'appointments') $('#bookForm [name=service]').innerHTML = '<option value="">เลือกบริการ</option>' + Object.entries(groups).map(([g, list]) =>
       `<optgroup label="${esc(g)}">${list.map(s => `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('')}</optgroup>`).join('');
     const courses = data.services.filter(s => s.is_course);
-    $('#sellForm [name=course]').innerHTML = '<option value="">เลือกคอร์ส</option>' +
+    if (PAGE === 'courses') $('#sellForm [name=course]').innerHTML = '<option value="">เลือกคอร์ส</option>' +
       courses.map(s => `<option value="${esc(s.name)}" data-sessions="${s.sessions || ''}" data-price="${s.price ?? ''}">${esc(s.name)}</option>`).join('');
   }
 
   function renderAll() {
     $('#todayLabel').textContent = data.today ? fullDay(data.today + 'T12:00:00+07:00') : 'Clinic Back Office';
-    renderAppointments(); renderCourses();
+    if (PAGE === 'appointments') renderAppointments(); else renderCourses();
   }
-
-  // ===== Tabs =====
-  function selectTab(name) {
-    document.querySelectorAll('[data-tab]').forEach(b => { const on = b.dataset.tab === name; b.classList.toggle('is-active', on); b.setAttribute('aria-selected', on); });
-    document.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== name; });
-    history.replaceState(null, '', '#' + name);
-  }
-  document.querySelectorAll('[data-tab]').forEach(btn => btn.addEventListener('click', () => selectTab(btn.dataset.tab)));
 
   // ===================== นัดหมาย =====================
   const appts = () => data.appointments || [];
@@ -156,7 +151,6 @@
     const req = appts().filter(isRequest);
     const proposed = appts().filter(isProposed);
     const moves = appts().filter(isMoveReq);
-    $('#reqCount').textContent = (req.length + moves.length) || '';
 
     $('#apptKpis').innerHTML = [
       ['นัดวันนี้', todayList.length, `${todayList.filter(a => a.confirm_status === 'confirmed').length} คนกดยืนยันมาแล้ว`, false],
@@ -253,7 +247,7 @@
     } catch { select.innerHTML = '<option value="">โหลดเวลาไม่สำเร็จ</option>'; }
   }
 
-  $('#requestList').addEventListener('click', async e => {
+  if (PAGE === 'appointments') $('#requestList').addEventListener('click', async e => {
     const btn = e.target.closest('[data-do]');
     if (!btn) return;
     const id = btn.closest('[data-id]').dataset.id;
@@ -270,7 +264,7 @@
     } catch { toast('ทำรายการไม่สำเร็จ', true); btn.disabled = false; }
   });
 
-  $('#requestList').addEventListener('submit', async e => {
+  if (PAGE === 'appointments') $('#requestList').addEventListener('submit', async e => {
     e.preventDefault();
     const form = e.target;
     const id = form.closest('[data-id]').dataset.id;
@@ -322,6 +316,7 @@
         <td style="text-align:right">${a.status === 'pending' ? '<button class="btn btn--outline btn--sm bo-btn-danger" type="button" data-cancel>ยกเลิกนัด</button>' : ''}</td>
       </tr>`; }).join('')}</tbody></table>`;
   }
+  if (PAGE === 'appointments') {
   $('#typeFilters').addEventListener('click', e => { const b = e.target.closest('[data-type]'); if (b) { typeFilter = b.dataset.type; renderApptTable(); } });
   $('#apptSearch').addEventListener('input', renderApptTable);
   $('#apptTable').addEventListener('click', async e => {
@@ -380,6 +375,8 @@
     } catch { btn.disabled = false; err.textContent = 'บันทึกไม่สำเร็จ'; err.hidden = false; }
   });
 
+  }
+
   // ===================== คอร์ส =====================
   function renderCourses() {
     const pk = data.packages || [];
@@ -436,6 +433,7 @@
       </article>`;
     }).join('');
   }
+  if (PAGE === 'courses') {
   document.querySelectorAll('[data-pkgtab]').forEach(b => b.addEventListener('click', () => {
     pkgTab = b.dataset.pkgtab;
     document.querySelectorAll('[data-pkgtab]').forEach(x => x.classList.toggle('is-active', x === b));
@@ -484,6 +482,8 @@
       await reload(`ขายคอร์ส ${r.package.package_name} ${r.package.total} ครั้งแล้ว${r.patient && !r.patient.linked ? ' · ลูกค้ายังไม่ผูก LINE' : ''}`);
     } catch { btn.disabled = false; err.textContent = 'บันทึกไม่สำเร็จ'; err.hidden = false; }
   });
+
+  }
 
   boot();
 })();

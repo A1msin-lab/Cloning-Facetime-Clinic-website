@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>หลังบ้านคลินิก | FaceTime Clinic</title>
+  <title>นัดหมาย | หลังบ้าน FaceTime Clinic</title>
   <link rel="icon" href="images/logo/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,12 +13,13 @@
   <link rel="stylesheet" href="css/admin.css">
   <link rel="stylesheet" href="css/backoffice.css">
 </head>
-<body class="admin-body">
+<body class="admin-body" data-page="appointments">
   <header class="admin-header">
     <div class="admin-wrap admin-header-inner">
       <a class="brand" href="index.html"><img src="images/logo/logo.png" alt="FaceTime Clinic"><span class="brand-text">FACE TIME<small>CLINIC</small></span></a>
       <nav class="bo-sitenav" aria-label="หลังบ้าน">
-        <a href="backoffice.html#appointments" class="is-active">นัดหมาย &amp; คอร์ส</a>
+        <a href="backoffice.html" class="is-active">นัดหมาย</a>
+        <a href="backoffice-courses.html">คอร์ส</a>
         <a href="admin.html">ร้านค้า</a>
       </nav>
       <div class="admin-user" id="adminUser" hidden>
@@ -45,17 +46,12 @@
 
     <section id="dashView" hidden>
       <div class="admin-title">
-        <div><p class="eyebrow" id="todayLabel">Clinic Back Office</p><h1>หลังบ้านคลินิก</h1></div>
+        <div><p class="eyebrow" id="todayLabel">Clinic Back Office</p><h1>นัดหมาย</h1></div>
         <button class="btn btn--outline btn--sm" id="refreshBtn" type="button">รีเฟรชข้อมูล</button>
       </div>
 
-      <nav class="admin-tabs" role="tablist">
-        <button type="button" role="tab" data-tab="appointments" class="is-active">นัดหมาย <span class="admin-count" id="reqCount"></span></button>
-        <button type="button" role="tab" data-tab="courses">คอร์ส</button>
-      </nav>
-
       <!-- ===================== นัดหมาย ===================== -->
-      <div class="admin-panel" data-panel="appointments">
+      <div class="admin-panel">
         <div class="kpi-grid" id="apptKpis"></div>
 
         <div class="bo-cols">
@@ -101,48 +97,6 @@
         </section>
       </div>
 
-      <!-- ===================== คอร์ส ===================== -->
-      <div class="admin-panel" data-panel="courses" hidden>
-        <div class="kpi-grid" id="courseKpis"></div>
-
-        <div class="bo-cols">
-          <section class="admin-card bo-col-main" aria-labelledby="pkgHead">
-            <div class="bo-card-head bo-wrap">
-              <h2 id="pkgHead">ตัดคอร์ส</h2>
-              <div class="bo-filters" role="tablist">
-                <button type="button" class="bo-chip is-active" data-pkgtab="active">ใช้งานอยู่ <span id="activeN"></span></button>
-                <button type="button" class="bo-chip" data-pkgtab="history">ประวัติ <span id="historyN"></span></button>
-              </div>
-            </div>
-            <div class="admin-toolbar">
-              <label>ค้นหา<input id="pkgSearch" placeholder="ชื่อ เบอร์โทร หรือคอร์ส"></label>
-            </div>
-            <div id="pkgList"></div>
-          </section>
-
-          <div class="bo-col-side bo-stack">
-            <section class="admin-card" aria-labelledby="sellHead">
-              <h2 id="sellHead">ขายคอร์สใหม่</h2>
-              <form id="sellForm" class="admin-form">
-                <label>ชื่อลูกค้า<input name="customer_name" required placeholder="ชื่อ–นามสกุล"></label>
-                <label>เบอร์โทร<input name="phone" required inputmode="numeric" placeholder="0812345678" pattern="0[0-9\- ]{9,11}"></label>
-                <label>คอร์ส<select name="course" required></select></label>
-                <div class="bo-grid2">
-                  <label>จำนวนครั้ง<input name="sessions" type="number" min="1" max="200" required></label>
-                  <label>ราคา (บาท)<input name="price" type="number" min="0" step="1" placeholder="ไม่ระบุก็ได้"></label>
-                </div>
-                <label>หมดอายุใน (วัน)<input name="expire_days" type="number" min="0" placeholder="เว้นว่าง = ไม่มีวันหมดอายุ"></label>
-                <button class="btn btn--gold btn--block" type="submit">บันทึกการขาย</button>
-                <p class="admin-error" id="sellError" hidden></p>
-              </form>
-            </section>
-            <section class="admin-card" aria-labelledby="logHead">
-              <h2 id="logHead">ตัดคอร์สล่าสุด</h2>
-              <ol class="bo-log" id="usageList"></ol>
-            </section>
-          </div>
-        </div>
-      </div>
       <p class="bo-note">หมายเหตุ: การยืนยัน/เสนอเวลา/ลงนัดจากหน้าเว็บจะบันทึกลงระบบและซิงก์ Google Calendar อัตโนมัติ แต่ยังไม่ส่งข้อความ LINE แจ้งลูกค้าทันที (ลูกค้ายังได้แจ้งเตือนล่วงหน้า 1 วันตามปกติ)</p>
     </section>
 
