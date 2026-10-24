@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>ติดตามหลังทำ | หลังบ้าน FaceTime Clinic</title>
+  <link rel="icon" href="images/logo/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Noto+Sans+Thai:wght@300;400;500;600&family=Pridi:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/backoffice.css">
+</head>
+<body class="admin-body" data-page="postcare">
+  <header class="admin-header">
+    <div class="admin-wrap admin-header-inner">
+      <a class="brand" href="index.html"><img src="images/logo/logo.png" alt="FaceTime Clinic"><span class="brand-text">FACE TIME<small>CLINIC</small></span></a>
+      <nav class="bo-sitenav" aria-label="หลังบ้าน">
+        <a href="backoffice.html">นัดหมาย</a>
+        <a href="backoffice-courses.html">คอร์ส</a>
+        <a href="backoffice-postcare.html" class="is-active">ติดตามหลังทำ</a>
+        <a href="admin.html">ร้านค้า</a>
+      </nav>
+      <div class="admin-user" id="adminUser" hidden>
+        <button class="btn btn--outline btn--sm" id="logoutBtn" type="button">ล้างรหัสในเครื่องนี้</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-wrap">
+    <!-- ใช้รหัสหลังบ้านเดียวกับร้านค้า: เข้าด้วยลิงก์ backoffice-postcare.html?key=XXXX หรือกรอกรหัส -->
+    <section class="admin-login" id="loginView" hidden>
+      <p class="eyebrow">Clinic Back Office</p>
+      <h1>หลังบ้านคลินิก</h1>
+      <p class="admin-muted">กรอกรหัสหลังบ้าน (รหัสเดียวกับหลังบ้านร้านค้า ระบบจะจำไว้ในเครื่องนี้)</p>
+      <form id="loginForm" class="admin-form">
+        <label>รหัสหลังบ้าน<input name="key" required autocomplete="off"></label>
+        <button class="btn btn--gold btn--block" type="submit">เข้าหลังบ้าน</button>
+        <p class="admin-error" id="loginError" hidden></p>
+      </form>
+    </section>
+
+    <section id="dashView" hidden>
+      <div class="admin-title">
+        <div><p class="eyebrow" id="todayLabel">Clinic Back Office</p><h1>ติดตามหลังทำ</h1></div>
+        <button class="btn btn--outline btn--sm" id="refreshBtn" type="button">รีเฟรชข้อมูล</button>
+      </div>
+
+      <div class="admin-panel">
+        <div class="kpi-grid" id="pcKpis"></div>
+
+        <section class="admin-card bo-section" aria-labelledby="issueHead">
+          <div class="bo-card-head">
+            <h2 id="issueHead">ลูกค้าแจ้งอาการ</h2>
+            <span class="admin-muted">เรียงจากด่วนที่สุด · ระดับจาก AI เป็นการคัดกรองเบื้องต้น</span>
+          </div>
+          <div id="issueList"></div>
+        </section>
+
+        <section class="admin-card" aria-labelledby="allHead">
+          <div class="bo-card-head bo-wrap">
+            <h2 id="allHead">ภาพรวมการติดตาม (60 วันล่าสุด)</h2>
+            <div class="bo-filters" role="tablist" id="pcFilters"></div>
+          </div>
+          <div class="admin-toolbar">
+            <label>ค้นหา<input id="pcSearch" placeholder="ชื่อ เบอร์โทร หรือบริการ"></label>
+          </div>
+          <div class="admin-scroll" id="pcTable"></div>
+        </section>
+      </div>
+
+      <p class="bo-note">หมายเหตุ: ระบบส่งการ์ดถามอาการทาง LINE วันที่ 1, 3 และ 7 หลังพนักงานบันทึกบริการ (10:00 น.) · หน้านี้ดูอย่างเดียว ติดต่อลูกค้าด้วยปุ่มโทร</p>
+    </section>
+
+    <p class="admin-loading" id="loadingView">กำลังโหลด...</p>
+  </main>
+
+  <div class="admin-toast" id="toast" hidden></div>
+
+  <script src="js/supabase-config.js"></script>
+  <script src="js/backoffice-postcare.js"></script>
+</body>
+</html>
